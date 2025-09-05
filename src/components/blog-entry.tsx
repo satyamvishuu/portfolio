@@ -1,33 +1,30 @@
 import Link from "next/link";
+import { BlogPostPreview } from "../../lib/contentful";
 
 interface BlogEntryProps {
-  blog: {
-    title: string;
-    slug: string;
-    excerpt: string;
-    date: string;
-    tags: string[];
-  };
+  blog: BlogPostPreview;
 }
 
 export function BlogEntry({ blog }: BlogEntryProps) {
   return (
-    <div className="space-y-2">
-      <Link
-        href={`/blog/${blog.slug}`}
-        className="text-base mb-1 font-serif hover:underline"
-      >
-        {blog.title}
-      </Link>
+    <article className="border-b border-gray-200 pb-6">
+      <h2 className="text-2xl font-semibold">
+        <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
+      </h2>
       <p className="text-sm text-gray-500">{blog.date}</p>
-      <p className="text-sm text-zinc-500 mt-2 italic">{blog.excerpt}</p>
-      <div className="flex gap-2 text-xs text-gray-500">
-        {blog.tags.map((tag, i) => (
-          <span key={i} className="px-2 py-1 bg-gray-100 rounded">
-            {tag}
-          </span>
-        ))}
-      </div>
-    </div>
+      <p className="mt-2 text-gray-700">{blog.excerpt}</p>
+      {blog.tags.length > 0 && (
+        <div className="mt-2 space-x-2">
+          {blog.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs bg-gray-100 px-2 py-1 rounded"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </article>
   );
 }
