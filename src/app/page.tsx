@@ -124,10 +124,10 @@ export default async function Home() {
                     blogs.length > 0 && (
                       <section key={sectionName}>
                         <h2 className="font-serif text-md mb-12 tracking-wide uppercase">
-                          Blogs
+                          Latest Blogs
                         </h2>
                         <div className="space-y-12">
-                          {blogs.map((blog, index) => (
+                          {blogs.slice(0, 3).map((blog, index) => (
                             <BlogEntry key={index} blog={blog} />
                           ))}
                         </div>
