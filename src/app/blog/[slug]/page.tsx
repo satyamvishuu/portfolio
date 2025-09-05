@@ -6,12 +6,11 @@ interface Params {
   slug: string;
 }
 
-export default async function BlogPostPage(props: { params: Params }) {
+export default async function BlogPostPage(props: any) {
   const { params } = props;
   const blog = await getBlogPostBySlug(params.slug);
-
   if (!blog) return notFound();
-
+  
   return (
     <article className="max-w-3xl mx-auto py-12">
       <h1 className="font-serif text-3xl font-light tracking-wide mb-3">{blog.title}</h1>
