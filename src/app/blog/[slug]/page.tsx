@@ -1,4 +1,3 @@
-// src/app/blog/[slug]/page.tsx
 import { getBlogPostBySlug } from "../../../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { notFound } from "next/navigation";
