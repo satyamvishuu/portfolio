@@ -10,11 +10,15 @@ import { NewsEntry } from "@/components/news-entry";
 import { newsData } from "@/data/news";
 import { ExperienceEntry } from "@/components/experience-entry";
 import { experienceData } from "@/data/experience";
-import { PortfolioEntry } from "@/components/portfolio-entry";
-import { portfolioData } from "@/data/portfolio";
+// import { PortfolioEntry } from "@/components/portfolio-entry";
+// import { portfolioData } from "@/data/portfolio";
 import { sectionOrder, Section } from "@/data/section-order";
+import { getBlogPosts } from "../../lib/contentful";
+import { BlogEntry } from "@/components/blog-entry";
 
-export default function Home() {
+
+export default async function Home() {
+  const blogs = await getBlogPosts();
   return (
     <div className="min-h-screen bg-[#FFFCF8]">
       {/* Don't have a great call on whether max-w-screen-xl is better */}
@@ -117,14 +121,14 @@ export default function Home() {
                   );
                 case Section.Portfolio:
                   return (
-                    portfolioData.length > 0 && (
+                    blogs.length > 0 && (
                       <section key={sectionName}>
                         <h2 className="font-serif text-md mb-12 tracking-wide uppercase">
                           Blogs
                         </h2>
                         <div className="space-y-12">
-                          {portfolioData.map((portfolio, index) => (
-                            <PortfolioEntry key={index} portfolio={portfolio} />
+                          {blogs.map((blog, index) => (
+                            <BlogEntry key={index} blog={blog} />
                           ))}
                         </div>
                       </section>

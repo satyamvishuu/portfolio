@@ -30,7 +30,7 @@ export const aboutMe: AboutMe = {
   githubUsername: "satyamvishuu",
   linkedinUsername: "satyamvishuu",
   twitterUsername: "satyamvishuu",
-  blogUrl: "https://",
+  blogUrl: "/blog",
   cvUrl: "https://",
   institutionUrl: "https://www.iitg.ac.in",
   // altName: "",
