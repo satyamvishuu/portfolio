@@ -1,12 +1,13 @@
+// src/app/blog/[slug]/page.tsx
 import { getBlogPostBySlug } from "../../../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { notFound } from "next/navigation";
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+interface Params {
+  slug: string;
+}
+
+export default async function BlogPostPage({ params }: { params: Params }) {
   const blog = await getBlogPostBySlug(params.slug);
 
   if (!blog) return notFound();
@@ -18,9 +19,7 @@ export default async function BlogPostPage({
       </h1>
       <p className="text-gray-500 mb-6">{blog.date}</p>
       <div
-        dangerouslySetInnerHTML={{
-          __html: documentToHtmlString(blog.content as any),
-        }}
+        dangerouslySetInnerHTML={{ __html: documentToHtmlString(blog.content) }}
       />
     </article>
   );
