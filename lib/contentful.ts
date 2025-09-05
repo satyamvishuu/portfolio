@@ -1,24 +1,51 @@
-import { createClient } from "contentful";
+import { createClient, Entry } from "contentful";
+import { Document } from "@contentful/rich-text-types";
 
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
 
-export async function getBlogPosts() {
-  const entries = await client.getEntries({ content_type: "techBlogPost" });
-
-  return entries.items.map((item: any) => ({
-    title: item.fields.title,
-    slug: item.fields.slug,
-    excerpt: item.fields.excerpt,
-    date: item.fields.date,
-    tags: item.fields.tags || [],
-    content: item.fields.content,
-  }));
+export interface BlogPost {
+  title: string;
+  slug: string;
+  excerpt: string;
+  date: string;
+  tags: string[];
+  content: Document;
 }
 
-export async function getBlogPostBySlug(slug: string) {
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  const entries = await client.getEntries({ content_type: "techBlogPost" });
+
+  return entries.items
+    .map((item: Entry<any>) => {
+      const { title, slug, excerpt, date, tags, content } = item.fields;
+
+      if (
+        typeof title !== "string" ||
+        typeof slug !== "string" ||
+        typeof excerpt !== "string" ||
+        typeof date !== "string" ||
+        !content
+      )
+        return null;
+
+      return {
+        title,
+        slug,
+        excerpt,
+        date,
+        tags: Array.isArray(tags)
+          ? tags.filter((t): t is string => typeof t === "string")
+          : [],
+        content: content as Document,
+      } as BlogPost;
+    })
+    .filter(Boolean) as BlogPost[];
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   const entries = await client.getEntries({
     content_type: "techBlogPost",
     "fields.slug": slug,
@@ -28,12 +55,26 @@ export async function getBlogPostBySlug(slug: string) {
   if (!entries.items.length) return null;
 
   const item = entries.items[0];
+  const { title, slug: s, excerpt, date, tags, content } = item.fields;
+
+  if (
+    typeof title !== "string" ||
+    typeof s !== "string" ||
+    typeof excerpt !== "string" ||
+    typeof date !== "string" ||
+    !content
+  )
+    return null;
+
   return {
-    title: item.fields.title,
-    slug: item.fields.slug,
-    excerpt: item.fields.excerpt,
-    date: item.fields.date,
-    tags: item.fields.tags || [],
-    content: item.fields.content,
+    title,
+    slug: s,
+    excerpt,
+    date,
+    tags: Array.isArray(tags)
+      ? tags.filter((t): t is string => typeof t === "string")
+      : [],
+    content: content as Document,
   };
 }
+
