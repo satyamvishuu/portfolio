@@ -6,7 +6,7 @@ export default async function BlogPage() {
   console.log('Blogs to render:', blogs.length);
 
   return (
-    <main className="max-w-3xl mx-auto py-12">
+    <main className="max-w-3xl mx-auto py-12 px-4 sm:px-8">
       <h1 className="font-serif text-3xl font-light tracking-wide mb-8">
         WELCOME TO MY BLOGS
       </h1>
